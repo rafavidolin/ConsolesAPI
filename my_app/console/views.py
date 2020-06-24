@@ -10,6 +10,8 @@ parser = reqparse.RequestParser()
 parser.add_argument('name',type=str)
 parser.add_argument('year',type=int)
 parser.add_argument('price',type=float)
+parser.add_argument('active',type=bool)
+parser.add_argument('qtdGames',type=int)
 
 @console.route("/")
 @console.route("/home")
@@ -35,7 +37,9 @@ class ConsoleAPI(Resource):
                     'id': con.id,
                     'name': con.name,
                     'year': con.year,
-                    'price': con.price
+                    'price': con.price,
+                    'active': con.active,
+                    'qtdGames': con.qtdGames
                 }
             return jsonify(res)
         if not consoles:
@@ -46,8 +50,10 @@ class ConsoleAPI(Resource):
         name = args['name']
         year = args['year']
         price = args['price']
+        active = args['active']
+        qtdGames = args['qtdGames']
 
-        con = Console(name,year,price)
+        con = Console(name,year,price,active,qtdGames)
         db.session.add(con)
         db.session.commit()
         res = { 'name' : con.name }
@@ -66,9 +72,13 @@ class ConsoleAPI(Resource):
         name = args['name']
         year = args['year']
         price = args['price']
+        active = args['active']
+        qtdGames = args['qtdGames']
         con.name = name
         con.year = year
         con.price = price
+        con.active = active
+        con.qtdGames = qtdGames
         db.session.commit()
         res = {'id':con.id}
         return jsonify(res)
